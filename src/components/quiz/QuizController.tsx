@@ -190,17 +190,14 @@ const QuizController = ({ config }: QuizControllerProps) => {
       const destination = new URL('https://spanishvip.com/start-spanish-today/');
       const params = new URLSearchParams();
 
-      if (payload.name) params.set('name', payload.name);
-      if (payload.email) params.set('email', payload.email);
       params.set('score', String(payload.score));
       if (payload.percentageScore != null) params.set('percentage', String(payload.percentageScore));
-      if (payload.resultLevel) params.set('result_level', payload.resultLevel);
+      if (payload.resultLevel) {
+        const cefrMatch = payload.resultLevel.match(/^(A1|A2|B1|B2|C1|C2)/i);
+        params.set('result_level', cefrMatch ? cefrMatch[1].toUpperCase() : payload.resultLevel);
+      }
       params.set('total_questions', String(payload.totalQuestions));
       params.set('time_taken_seconds', String(payload.timeTakenSeconds));
-      if (payload.timeTakenFormatted) params.set('time_taken_formatted', payload.timeTakenFormatted);
-      if (payload.submissionDate) params.set('submission_date', payload.submissionDate);
-      if (payload['quizz-id']) params.set('quiz_id', payload['quizz-id']);
-      if (payload.quizTitle) params.set('quiz_title', payload.quizTitle);
 
       destination.search = params.toString();
       console.log('Quiz redirect URL:', destination.toString());

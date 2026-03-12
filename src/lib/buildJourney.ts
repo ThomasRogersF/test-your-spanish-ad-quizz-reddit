@@ -1,5 +1,5 @@
 /**
- * Content + logic engine for the “Based on your answers…” section.
+ * Content + logic engine for the "Based on your answers…" section.
  * Produces four data-driven cards from the computed level and graded answers.
  */
 
@@ -62,30 +62,30 @@ const QUESTION_META: Record<
   number,
   {
     level: LevelKey;
-    type: “mcq” | “image” | “audio” | “fill”;
+    type: "mcq" | "image" | "audio" | "fill";
     skills: SkillKey[];
     topics: string[];
   }
 > = {
   // A1
-  1:  { level: “a1”, type: “mcq”,   skills: [“vocab”, “usage”], topics: [“greetings”, “introductions”] },
-  3:  { level: “a1”, type: “fill”,  skills: [“grammar”],        topics: [“present tense”, “tener (3rd)”] },
-  5:  { level: “a1”, type: “mcq”,   skills: [“usage”],          topics: [“sentence correctness (A1)”] },
+  1:  { level: "a1", type: "mcq",   skills: ["vocab", "usage"], topics: ["greetings", "introductions"] },
+  3:  { level: "a1", type: "fill",  skills: ["grammar"],        topics: ["present tense", "tener (3rd)"] },
+  5:  { level: "a1", type: "mcq",   skills: ["usage"],          topics: ["sentence correctness (A1)"] },
 
   // A2
-  7:  { level: “a2”, type: “mcq”,   skills: [“grammar”, “usage”], topics: [“preterite vs imperfect”, “motion verbs”] },
-  8:  { level: “a2”, type: “mcq”,   skills: [“usage”],            topics: [“prepositions”, “para/por”, “ti”] },
-  12: { level: “a2”, type: “audio”, skills: [“listening”],         topics: [“accomplishments (present perfect)”] },
+  7:  { level: "a2", type: "mcq",   skills: ["grammar", "usage"], topics: ["preterite vs imperfect", "motion verbs"] },
+  8:  { level: "a2", type: "mcq",   skills: ["usage"],            topics: ["prepositions", "para/por", "ti"] },
+  12: { level: "a2", type: "audio", skills: ["listening"],         topics: ["accomplishments (present perfect)"] },
 
   // B1
-  13: { level: “b1”, type: “mcq”,  skills: [“grammar”, “usage”], topics: [“duration structures”, “progressive/perfect aspect”] },
-  15: { level: “b1”, type: “fill”, skills: [“grammar”],          topics: [“subjunctive (present)”, “saber (tú)”] },
-  17: { level: “b1”, type: “mcq”,  skills: [“usage”],            topics: [“sentence correctness (B1)”] },
+  13: { level: "b1", type: "mcq",  skills: ["grammar", "usage"], topics: ["duration structures", "progressive/perfect aspect"] },
+  15: { level: "b1", type: "fill", skills: ["grammar"],          topics: ["subjunctive (present)", "saber (tú)"] },
+  17: { level: "b1", type: "mcq",  skills: ["usage"],            topics: ["sentence correctness (B1)"] },
 
   // B2
-  19: { level: “b2”, type: “mcq”, skills: [“usage”, “grammar”], topics: [“se accidental”, “involuntary actions”] },
-  20: { level: “b2”, type: “mcq”, skills: [“grammar”],          topics: [“third conditional”, “counterfactuals”] },
-  25: { level: “b2”, type: “mcq”, skills: [“grammar”, “usage”], topics: [“IOP+DOP replacement”, “se + lo/la”] }
+  19: { level: "b2", type: "mcq", skills: ["usage", "grammar"], topics: ["se accidental", "involuntary actions"] },
+  20: { level: "b2", type: "mcq", skills: ["grammar"],          topics: ["third conditional", "counterfactuals"] },
+  25: { level: "b2", type: "mcq", skills: ["grammar", "usage"], topics: ["IOP+DOP replacement", "se + lo/la"] }
 };
 
 // ---------- Copy dictionaries ----------

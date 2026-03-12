@@ -1,8 +1,8 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { QuizConfig, QuizParticipant, QuizAnswer, ResultTemplate, EnhancedQuizParticipant } from "@/types/quiz";
-import { getNextQuestionId, getPersonalizedResult, sendDataToWebhook, isAnswerCorrect } from "@/utils/quizUtils";
+import { getNextQuestionId, getPersonalizedResult, sendDataToWebhook, buildWebhookPayload, isAnswerCorrect } from "@/utils/quizUtils";
 import IntroductionPage from "./IntroductionPage";
 import QuestionCard from "./QuestionCard";
 import ConversionLandingPage from "./ConversionLandingPage";
@@ -34,6 +34,7 @@ const QuizController = ({ config }: QuizControllerProps) => {
   const [gradedAnswers, setGradedAnswers] = useState<JourneyAnswer[]>([]);
   const [userContext, setUserContext] = useState<JourneyUserContext | undefined>(undefined);
   const [questionStartTime, setQuestionStartTime] = useState<Date | null>(null);
+  const isSubmittingRef = useRef(false);
 
   // Effect to handle completion of questions and transition to user info stage
   useEffect(() => {
@@ -152,8 +153,11 @@ const QuizController = ({ config }: QuizControllerProps) => {
   };
 
   const handleUserInfoSubmit = (name: string, email: string) => {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+
     console.log("User info submitted:", name, email);
-    
+
     // Update participant info
     const updatedParticipant: EnhancedQuizParticipant = {
       ...participant,
@@ -177,10 +181,33 @@ const QuizController = ({ config }: QuizControllerProps) => {
       console.error("Error grading answers for journey cards:", e);
       setGradedAnswers([]);
     }
-    
+
     setParticipant(updatedParticipant);
-    
-    // Send data to webhook if configured
+
+    const payload = buildWebhookPayload(updatedParticipant, config, personalizedResult);
+
+    const doRedirect = () => {
+      const destination = new URL('https://spanishvip.com/start-spanish-today/');
+      const params = new URLSearchParams();
+
+      if (payload.name) params.set('name', payload.name);
+      if (payload.email) params.set('email', payload.email);
+      params.set('score', String(payload.score));
+      if (payload.percentageScore != null) params.set('percentage', String(payload.percentageScore));
+      if (payload.resultLevel) params.set('result_level', payload.resultLevel);
+      params.set('total_questions', String(payload.totalQuestions));
+      params.set('time_taken_seconds', String(payload.timeTakenSeconds));
+      if (payload.timeTakenFormatted) params.set('time_taken_formatted', payload.timeTakenFormatted);
+      if (payload.submissionDate) params.set('submission_date', payload.submissionDate);
+      if (payload['quizz-id']) params.set('quiz_id', payload['quizz-id']);
+      if (payload.quizTitle) params.set('quiz_title', payload.quizTitle);
+
+      destination.search = params.toString();
+      console.log('Quiz redirect URL:', destination.toString());
+      window.location.assign(destination.toString());
+    };
+
+    // Send data to webhook if configured, then redirect
     if (config.webhookUrl) {
       sendDataToWebhook(config.webhookUrl, updatedParticipant, config, personalizedResult)
         .then((success) => {
@@ -199,11 +226,13 @@ const QuizController = ({ config }: QuizControllerProps) => {
             description: "There was an error submitting your data.",
             variant: "destructive"
           });
+        })
+        .finally(() => {
+          doRedirect();
         });
+    } else {
+      doRedirect();
     }
-    
-    // Proceed to conversion landing page
-    setStage("conversion-landing");
   };
   
   const handleExternalRedirect = () => {
@@ -222,10 +251,39 @@ const QuizController = ({ config }: QuizControllerProps) => {
       answers: []
     };
     const mockResult = config.resultTemplates.length > 0 ? config.resultTemplates[0] : null;
-    
+
     setParticipant(mockParticipant);
     setPersonalizedResult(mockResult);
     setStage("conversion-landing");
+  };
+
+  // DEBUG: Function to jump to user info form with random answers pre-loaded
+  const handleDebugUserInfo = () => {
+    const randomAnswers: QuizAnswer[] = config.questions.map((q) => {
+      let value: string;
+      if ((q.type === 'mcq' || q.type === 'audio') && q.options && q.options.length > 0) {
+        value = q.options[Math.floor(Math.random() * q.options.length)].value;
+      } else if (q.type === 'image-selection' && q.imageOptions && q.imageOptions.length > 0) {
+        value = q.imageOptions[Math.floor(Math.random() * q.imageOptions.length)].value;
+      } else {
+        value = 'debug_answer';
+      }
+      return { questionId: q.id, type: q.type, value };
+    });
+
+    const mockStartTime = new Date(Date.now() - 180000); // 3 minutes ago
+    const mockParticipant: EnhancedQuizParticipant = {
+      name: "",
+      email: "",
+      answers: randomAnswers,
+      quizStartTime: mockStartTime,
+      questionTimings: {}
+    };
+
+    const result = getPersonalizedResult(randomAnswers, config.resultTemplates);
+    setParticipant(mockParticipant);
+    setPersonalizedResult(result);
+    setStage("user-info");
   };
   
   // Calculate progress
@@ -258,10 +316,11 @@ const QuizController = ({ config }: QuizControllerProps) => {
     switch (stage) {
       case "intro":
         return (
-          <IntroductionPage 
+          <IntroductionPage
             config={config}
             onStart={handleStartQuiz}
-            onDebugLanding={handleDebugLanding} // DEBUG: Enable for debugging
+            onDebugLanding={handleDebugLanding}
+            onDebugUserInfo={handleDebugUserInfo}
           />
         );
       case "questions":

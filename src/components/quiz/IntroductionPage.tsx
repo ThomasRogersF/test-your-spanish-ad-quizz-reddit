@@ -8,10 +8,11 @@ import { useState } from "react";
 interface IntroductionPageProps {
   config: QuizConfig;
   onStart: () => void;
-  onDebugLanding?: () => void; // Debug function to jump to landing page
+  onDebugLanding?: () => void;
+  onDebugUserInfo?: () => void;
 }
 
-const IntroductionPage = ({ config, onStart, onDebugLanding }: IntroductionPageProps) => {
+const IntroductionPage = ({ config, onStart, onDebugLanding, onDebugUserInfo }: IntroductionPageProps) => {
   const [isDebugOpen, setIsDebugOpen] = useState(false);
   return (
     <div className="quiz-container w-full max-w-md animate-fade-in shadow-soft">
@@ -109,6 +110,18 @@ const IntroductionPage = ({ config, onStart, onDebugLanding }: IntroductionPageP
               >
                 Skip to Conversion Landing Page
               </Button>
+              {onDebugUserInfo && (
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    onDebugUserInfo();
+                    setIsDebugOpen(false);
+                  }}
+                >
+                  Skip to Name/Email Form (random answers)
+                </Button>
+              )}
             </div>
           </DialogContent>
         </Dialog>

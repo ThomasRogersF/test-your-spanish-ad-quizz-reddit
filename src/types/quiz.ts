@@ -81,6 +81,7 @@ export interface SimplifiedWebhookPayload {
   name: string;
   email: string;
   score: number;
+  percentageScore?: number;
   "quizz-id": string;
   submissionDate: string;
   timeTakenSeconds: number;

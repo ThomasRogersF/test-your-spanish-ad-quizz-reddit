@@ -204,7 +204,7 @@ const QuizController = ({ config }: QuizControllerProps) => {
 
       destination.search = params.toString();
       console.log('Quiz redirect URL:', destination.toString());
-      window.location.assign(destination.toString());
+      window.parent.postMessage({ action: 'redirect', url: destination.toString() }, '*');
     };
 
     // Send data to webhook if configured, then redirect

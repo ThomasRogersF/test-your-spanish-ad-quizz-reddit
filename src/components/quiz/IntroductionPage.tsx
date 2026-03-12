@@ -61,17 +61,7 @@ const IntroductionPage = ({ config, onStart, onDebugLanding, onDebugUserInfo }: 
         <ArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
       </Button>
 
-      <Button 
-        variant="outline" 
-        className="w-full mb-6"
-        onClick={() => window.parent.postMessage({ action: 'redirect', url: 'https://spanishvip.com/' }, '*')}
-        aria-label="Go back to SpanishVIP"
-        title="Go back to SpanishVIP"
-      >
-        Go back to SpanishVIP
-      </Button>
-
-      {config.introText && (
+{config.introText && (
         <div className="mb-8 text-gray-700 bg-brand-background p-5 rounded-[1rem]">
           <p>{config.introText}</p>
         </div>

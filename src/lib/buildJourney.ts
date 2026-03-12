@@ -62,43 +62,30 @@ const QUESTION_META: Record<
   number,
   {
     level: LevelKey;
-    type: "mcq" | "image" | "audio" | "fill";
+    type: “mcq” | “image” | “audio” | “fill”;
     skills: SkillKey[];
     topics: string[];
   }
 > = {
-  // A1 (1–6)
-  1: { level: "a1", type: "mcq", skills: ["vocab", "usage"], topics: ["greetings", "introductions"] },
-  2: { level: "a1", type: "mcq", skills: ["usage"], topics: ["conversation flow"] },
-  3: { level: "a1", type: "fill", skills: ["grammar"], topics: ["present tense", "tener (3rd)"] },
-  4: { level: "a1", type: "image", skills: ["vocab"], topics: ["food basics", "colors"] },
-  5: { level: "a1", type: "mcq", skills: ["usage"], topics: ["sentence correctness (A1)"] },
-  6: { level: "a1", type: "audio", skills: ["listening"], topics: ["daily routines (A1)"] },
+  // A1
+  1:  { level: “a1”, type: “mcq”,   skills: [“vocab”, “usage”], topics: [“greetings”, “introductions”] },
+  3:  { level: “a1”, type: “fill”,  skills: [“grammar”],        topics: [“present tense”, “tener (3rd)”] },
+  5:  { level: “a1”, type: “mcq”,   skills: [“usage”],          topics: [“sentence correctness (A1)”] },
 
-  // A2 (7–12)
-  7: { level: "a2", type: "mcq", skills: ["grammar", "usage"], topics: ["preterite vs imperfect", "motion verbs"] },
-  8: { level: "a2", type: "mcq", skills: ["usage"], topics: ["prepositions", "para/por", "ti"] },
-  9: { level: "a2", type: "fill", skills: ["grammar"], topics: ["imperfect", "ir→iba"] },
-  10: { level: "a2", type: "image", skills: ["vocab"], topics: ["household items", "kitchen: licuadora"] },
-  11: { level: "a2", type: "mcq", skills: ["usage"], topics: ["sentence correctness (A2)"] },
-  12: { level: "a2", type: "audio", skills: ["listening"], topics: ["accomplishments (present perfect)"] },
+  // A2
+  7:  { level: “a2”, type: “mcq”,   skills: [“grammar”, “usage”], topics: [“preterite vs imperfect”, “motion verbs”] },
+  8:  { level: “a2”, type: “mcq”,   skills: [“usage”],            topics: [“prepositions”, “para/por”, “ti”] },
+  12: { level: “a2”, type: “audio”, skills: [“listening”],         topics: [“accomplishments (present perfect)”] },
 
-  // B1 (13–18)
-  13: { level: "b1", type: "mcq", skills: ["grammar", "usage"], topics: ["duration structures", "progressive/perfect aspect"] },
-  14: { level: "b1", type: "mcq", skills: ["grammar"], topics: ["future perfect", "sequence of tenses"] },
-  15: { level: "b1", type: "fill", skills: ["grammar"], topics: ["subjunctive (present)", "saber (tú)"] },
-  16: { level: "b1", type: "image", skills: ["vocab"], topics: ["environment", "cambio climático"] },
-  17: { level: "b1", type: "mcq", skills: ["usage"], topics: ["sentence correctness (B1)"] },
-  18: { level: "b1", type: "audio", skills: ["listening"], topics: ["wishes / desires (B1)"] },
+  // B1
+  13: { level: “b1”, type: “mcq”,  skills: [“grammar”, “usage”], topics: [“duration structures”, “progressive/perfect aspect”] },
+  15: { level: “b1”, type: “fill”, skills: [“grammar”],          topics: [“subjunctive (present)”, “saber (tú)”] },
+  17: { level: “b1”, type: “mcq”,  skills: [“usage”],            topics: [“sentence correctness (B1)”] },
 
-  // B2 (19–25)
-  19: { level: "b2", type: "mcq", skills: ["usage", "grammar"], topics: ["se accidental", "involuntary actions"] },
-  20: { level: "b2", type: "mcq", skills: ["grammar"], topics: ["third conditional", "counterfactuals"] },
-  21: { level: "b2", type: "fill", skills: ["grammar"], topics: ["present perfect subjunctive", "venir (tú)"] },
-  22: { level: "b2", type: "image", skills: ["vocab"], topics: ['idioms', '“echar chispas” (anger)'] },
-  23: { level: "b2", type: "mcq", skills: ["usage"], topics: ["sentence correctness (B2)"] },
-  24: { level: "b2", type: "audio", skills: ["listening"], topics: ["reported speech/details (B2)"] },
-  25: { level: "b2", type: "mcq", skills: ["grammar", "usage"], topics: ["IOP+DOP replacement", "se + lo/la"] }
+  // B2
+  19: { level: “b2”, type: “mcq”, skills: [“usage”, “grammar”], topics: [“se accidental”, “involuntary actions”] },
+  20: { level: “b2”, type: “mcq”, skills: [“grammar”],          topics: [“third conditional”, “counterfactuals”] },
+  25: { level: “b2”, type: “mcq”, skills: [“grammar”, “usage”], topics: [“IOP+DOP replacement”, “se + lo/la”] }
 };
 
 // ---------- Copy dictionaries ----------
@@ -211,7 +198,7 @@ export function buildJourney(params: {
 
   // Progress to next level (how much of the next band they already got right)
   const nextBand = LEVEL_COPY[levelKey].nextLevel;
-  const bandTotals: Record<LevelKey, number> = { a1: 6, a2: 6, b1: 6, b2: 7 };
+  const bandTotals: Record<LevelKey, number> = { a1: 3, a2: 3, b1: 3, b2: 3 };
   const pctToNext = nextBand ? Math.round((byLevel[nextBand] / bandTotals[nextBand]) * 100) : 100;
 
   // Readiness index blends skills (grammar heavier)

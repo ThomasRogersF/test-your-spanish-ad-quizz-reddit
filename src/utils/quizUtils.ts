@@ -72,35 +72,22 @@ const calculateLevelScore = (answers: QuizAnswer[], level: string): number => {
   const correctAnswerMap: Record<string, Record<string, string | string[]>> = {
     a1: {
       "q1": "me_llamo_sebastian",
-      "q2": "estoy_bien_tambien",
       "q3": "tiene",
-      "q4": "manzanas",
-      "q5": "oracion_d",
-      "q6": "banarse"
+      "q5": "oracion_d"
     },
     a2: {
       "q7": "corrio",
       "q8": "para",
-      "q9": "iba",
-      "q10": "licuadora",
-      "q11": "oracion_c",
       "q12": "ha_trabajado"
     },
     b1: {
       "q13": "llevamos",
-      "q14": "podre_descansar",
       "q15": "sepas",
-      "q16": "cambio_climatico",
-      "q17": "ojala_bien",
-      "q18": "tengas_buen_dia"
+      "q17": "ojala_bien"
     },
     b2: {
       "q19": "se_me_cayo",
       "q20": "habria_llamado",
-      "q21": "hayas_venido",
-      "q22": "angry",
-      "q23": "deje_ver",
-      "q24": "lo_esperara",
       "q25": "se_la_dijo"
     }
   };
@@ -237,32 +224,23 @@ export const sendDataToWebhook = async (
   }
 };
 
-// Exported map of all question IDs to their correct answers (q1..q25)
+// Exported map of correct answers for the 12 active questions
 export const ALL_CORRECT_ANSWERS: Record<string, string | string[]> = {
+  // A1
   "q1": "me_llamo_sebastian",
-  "q2": "estoy_bien_tambien",
   "q3": "tiene",
-  "q4": "manzanas",
   "q5": "oracion_d",
-  "q6": "banarse",
+  // A2
   "q7": "corrio",
   "q8": "para",
-  "q9": "iba",
-  "q10": "licuadora",
-  "q11": "oracion_c",
   "q12": "ha_trabajado",
+  // B1
   "q13": "llevamos",
-  "q14": "podre_descansar",
   "q15": "sepas",
-  "q16": "cambio_climatico",
   "q17": "ojala_bien",
-  "q18": "tengas_buen_dia",
+  // B2
   "q19": "se_me_cayo",
   "q20": "habria_llamado",
-  "q21": "hayas_venido",
-  "q22": "angry",
-  "q23": "deje_ver",
-  "q24": "lo_esperara",
   "q25": "se_la_dijo"
 };
 

@@ -82,6 +82,37 @@ const IntroductionPage = ({ config, onStart, onDebugLanding }: IntroductionPageP
         </p>
       )}
 
+      {/* Dev Panel */}
+      {onDebugLanding && (
+        <Dialog open={isDebugOpen} onOpenChange={setIsDebugOpen}>
+          <DialogTrigger asChild>
+            <button
+              className="fixed bottom-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              title="Dev Panel (debug mode)"
+            >
+              <Settings size={20} />
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Dev Panel</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">Skip the quiz for debugging purposes:</p>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  onDebugLanding();
+                  setIsDebugOpen(false);
+                }}
+              >
+                Skip to Conversion Landing Page
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

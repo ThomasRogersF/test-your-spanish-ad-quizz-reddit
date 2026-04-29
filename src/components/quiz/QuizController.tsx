@@ -1,8 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import { QuizConfig, QuizParticipant, QuizAnswer, ResultTemplate, EnhancedQuizParticipant } from "@/types/quiz";
-import { getNextQuestionId, getPersonalizedResult, sendDataToWebhook, buildWebhookPayload, isAnswerCorrect } from "@/utils/quizUtils";
+import { getNextQuestionId, getPersonalizedResult, sendDataToWebhook, isAnswerCorrect } from "@/utils/quizUtils";
 import IntroductionPage from "./IntroductionPage";
 import QuestionCard from "./QuestionCard";
 import ConversionLandingPage from "./ConversionLandingPage";
@@ -30,7 +29,6 @@ const QuizController = ({ config }: QuizControllerProps) => {
   });
   const [personalizedResult, setPersonalizedResult] = useState<ResultTemplate | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   const [gradedAnswers, setGradedAnswers] = useState<JourneyAnswer[]>([]);
   const [userContext, setUserContext] = useState<JourneyUserContext | undefined>(undefined);
   const [questionStartTime, setQuestionStartTime] = useState<Date | null>(null);
@@ -184,61 +182,25 @@ const QuizController = ({ config }: QuizControllerProps) => {
 
     setParticipant(updatedParticipant);
 
-    const payload = buildWebhookPayload(updatedParticipant, config, personalizedResult);
-
-    const doRedirect = () => {
-      const destination = new URL('https://spanishvip.com/start-spanish-today/');
-      const params = new URLSearchParams();
-
-      params.set('score', String(payload.score));
-      if (payload.percentageScore != null) params.set('percentage', String(payload.percentageScore));
-      if (payload.resultLevel) {
-        const cefrMatch = payload.resultLevel.match(/^(A1|A2|B1|B2|C1|C2)/i);
-        params.set('result_level', cefrMatch ? cefrMatch[1].toUpperCase() : payload.resultLevel);
-      }
-      params.set('total_questions', String(payload.totalQuestions));
-      params.set('time_taken_seconds', String(payload.timeTakenSeconds));
-
-      destination.search = params.toString();
-      console.log('Quiz redirect URL:', destination.toString());
-      window.parent.postMessage({ action: 'redirect', url: destination.toString() }, '*');
+    const showResults = () => {
+      setStage("conversion-landing");
+      isSubmittingRef.current = false;
     };
 
-    // Send data to webhook if configured, then redirect
+    // Send data to webhook if configured, then show results inline
     if (config.webhookUrl) {
       sendDataToWebhook(config.webhookUrl, updatedParticipant, config, personalizedResult)
-        .then((success) => {
-          if (!success) {
-            toast({
-              title: "Data submission issue",
-              description: "There was an issue sending your responses. Please try again later.",
-              variant: "destructive"
-            });
-          }
-        })
         .catch(error => {
           console.error("Error sending data to webhook:", error);
-          toast({
-            title: "Data submission error",
-            description: "There was an error submitting your data.",
-            variant: "destructive"
-          });
         })
         .finally(() => {
-          doRedirect();
+          showResults();
         });
     } else {
-      doRedirect();
+      showResults();
     }
   };
   
-  const handleExternalRedirect = () => {
-    // Post a message to parent to handle redirection
-    if (config.externalRedirectUrl) {
-      window.parent.postMessage({ action: 'redirect', url: config.externalRedirectUrl }, '*');
-    }
-  };
-
   // DEBUG: Function to jump directly to conversion landing page
   const handleDebugLanding = () => {
     // Set up mock data for testing
@@ -371,6 +333,10 @@ const QuizController = ({ config }: QuizControllerProps) => {
         return null;
     }
   };
+
+  if (stage === "conversion-landing") {
+    return <>{renderStage()}</>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-quiz-gray-light p-4">

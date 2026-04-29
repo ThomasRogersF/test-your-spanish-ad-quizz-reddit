@@ -286,24 +286,6 @@ const ConversionLandingPage = ({
         </div>
       </section>
 
-      {/* HUBSPOT CALENDAR SECTION */}
-      <section id="book-class-section" className="py-6 sm:py-8 md:py-12 lg:py-16 xl:py-24 bg-white">
-        <div className="text-center mb-6 sm:mb-8 md:mb-12">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 sm:px-0">
-            Book Your Free Spanish Class
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 px-2 sm:px-0">
-            Get a personalized 1:1 session with a native Spanish teacher
-            </p>
-          </div>
-
-        <div
-          className="meetings-iframe-container"
-          data-src="https://meetings.hubspot.com/spanishvip/schedule-your-free-spanish-class?embed=true"
-          style={{ width: "100%", minHeight: "350px", overflow: "auto", position: "relative" }}
-        ></div>
-      </section>
-
       {/* SECTION 2: RESULTS VISUALIZATION (Dynamic) */}
       <section className="py-6 sm:py-8 md:py-12 lg:py-16 w-full min-w-full p-0">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 w-full">
@@ -432,7 +414,7 @@ const ConversionLandingPage = ({
                 <Button
                   variant="outline"
                   className="px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold rounded-lg shadow-sm border-green-300 text-green-700 hover:bg-green-50"
-                  onClick={() => window.parent.postMessage({ action: 'redirect', url: 'https://spanishvip.com/group-classes/' }, '*')}
+                  onClick={() => document.getElementById('book-class-section')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   {journey.cards.timeline.cta?.label ?? "Start a free group session"}
                 </Button>
@@ -487,6 +469,23 @@ const ConversionLandingPage = ({
             </div>
           </div>
         </div>
+      </section>
+
+      {/* HUBSPOT CALENDAR SECTION */}
+      <section id="book-class-section" className="py-6 sm:py-8 md:py-12 lg:py-16 xl:py-24 bg-white">
+        <div className="text-center mb-6 sm:mb-8 md:mb-12">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2 sm:px-0">
+            Book Your Free Spanish Class
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 px-2 sm:px-0">
+            Get a personalized 1:1 session with a native Spanish teacher
+          </p>
+        </div>
+        <div
+          className="meetings-iframe-container"
+          data-src="https://meetings.hubspot.com/spanishvip/schedule-your-free-spanish-class?embed=true"
+          style={{ width: "100%", minHeight: "350px", overflow: "auto", position: "relative" }}
+        ></div>
       </section>
 
       {/* SECTION 3: SOCIAL PROOF SECTION */}
@@ -655,14 +654,12 @@ const ConversionLandingPage = ({
             Join thousands of students who have already transformed their Spanish skills with SpanishVIP.
           </p>
           
-          {config.externalRedirectUrl && (
-            <Button 
-              onClick={() => window.parent.postMessage({ action: 'redirect', url: config.externalRedirectUrl }, '*')}
-              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto max-w-sm sm:max-w-none mx-2 sm:mx-0"
-            >
-              Explore SpanishVIP <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-            </Button>
-          )}
+          <Button
+            onClick={() => document.getElementById('book-class-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto max-w-sm sm:max-w-none mx-2 sm:mx-0"
+          >
+            Book Your Free Class <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+          </Button>
         </div>
       </section>
 

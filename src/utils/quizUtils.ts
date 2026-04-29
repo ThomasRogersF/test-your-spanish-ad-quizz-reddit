@@ -172,7 +172,7 @@ export const buildWebhookPayload = (
     email: participant.email,
     score: correctAnswers,
     percentageScore,
-    "quizz-id": "Quizz-Flow-Pro",
+    "quizz-id": "Reddit-Quiz",
     submissionDate,
     timeTakenSeconds: totalSeconds,
     timeTakenFormatted: formatted,
